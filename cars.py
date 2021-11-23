@@ -6,7 +6,7 @@ from time import sleep
 
 cars = []
 headers = ['Модель', 'Год', 'Двигатель', 'Диллер', 'Цена в $', 'Цена €', 'Ссылка']
-for p in range(1, 22):
+for p in range(1, 14):
   url = f'https://salon.av.by/adverts/?iPageNo={p}&sort=0'
   response = requests.get(url)
   response.text
