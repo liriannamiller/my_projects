@@ -1,0 +1,46 @@
+from pip._vendor import requests
+import json
+import pandas as pd
+from time import sleep
+
+
+def get_members(group_id, num_id): #список id подписчиков
+    user_id = []
+    offset = 0
+    for i in range(num_id):
+        response = json.loads(requests.get('https://api.vk.com/method/groups.getMembers?group_id='+str(group_id)+''
+                                        '&offset='+str(offset)+'&count=1000&access_token=65f53f01e8d26415824401b8451d131cc870f'
+                                        '87b29a76a8ceec7c1c045a5190995595a3b8df5ad3ee1eab&v=5.131').text)
+        user_id.extend(response['response'].get('items'))
+        offset += 1000
+    return user_id
+
+def get_bday(user_id): #список дат рождения
+    bdays = []
+    for user in user_id:
+        try:
+            response = json.loads(requests.get('https://api.vk.com/method/users.get?user_ids='+str(user)+''
+                                    '&fields=bdate&access_token=65f53f01e8d26415824401b8451d131cc870f87b29a'
+                                    '76a8ceec7c1c045a5190995595a3b8df5ad3ee1eab&v=5.131').text)
+            bdays.append(''.join(response.get('response')[0].get('bdate')))
+        except:
+            bdays.append('No bdate')
+    return bdays
+
+# def gat_subscribes(user_id):
+#     subscribes = []
+#     for user in user_id:
+#         try:
+#             response = json.loads(requests.get('https://api.vk.com/method/users.getSubscriptions?user_ids='+str(user)+''
+#                                 '&fields=name&access_token=65f53f01e8d26415824401b8451d131cc870f87b29a'
+#                                 '76a8ceec7c1c045a5190995595a3b8df5ad3ee1eab&v=5.131').text)
+#             # subscribes.append(response)
+
+members = get_members(7736865, 2)
+birthdays = get_bday(members)
+
+data = {'user_id': members, 'bdate': birthdays}
+df = pd.DataFrame(data)
+df.to_csv('vk_members.csv')
+
+print(len(members), '\n', len(birthdays))
