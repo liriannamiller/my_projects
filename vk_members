@@ -27,20 +27,31 @@ def get_bday(user_id): #список дат рождения
             bdays.append('No bdate')
     return bdays
 
-# def gat_subscribes(user_id):
-#     subscribes = []
-#     for user in user_id:
-#         try:
-#             response = json.loads(requests.get('https://api.vk.com/method/users.getSubscriptions?user_ids='+str(user)+''
-#                                 '&fields=name&access_token=65f53f01e8d26415824401b8451d131cc870f87b29a'
-#                                 '76a8ceec7c1c045a5190995595a3b8df5ad3ee1eab&v=5.131').text)
-#             # subscribes.append(response)
+def get_subscribes(user_id): #список групп для каждого пользователя
+    subscriptions = []
+    one_user = []
+    api = vk.API(vk.Session(access_token='65f53f01e8d26415824401b8451d131cc870f87b29a76a8ceec7c1c045a5190995595a3b8df5ad3ee1eab'))
+    offset = 0
+    count = 2
+    for user in user_id:
+        for num in range(count):
+            try:
+                one_user.append(api.users.getSubscriptions(v=5.131, user_id=user, extended=1, offset=offset)['items'][0]['name'])
+                if len(one_user) == count:
+                    subscriptions.append(one_user)
+                    one_user = []
+            except:
+                subscriptions.append(['No info'])
+                break
+            offset += 1
+    return subscriptions
 
 members = get_members(7736865, 2)
 birthdays = get_bday(members)
+subscribes = get_subscribes(members)
 
-data = {'user_id': members, 'bdate': birthdays}
+data = {'user_id': members, 'bdate': birthdays, 'subscribes': subscribes}
 df = pd.DataFrame(data)
 df.to_csv('vk_members.csv')
 
-print(len(members), '\n', len(birthdays))
+
