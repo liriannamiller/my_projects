@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../ford_price_prediction/.idea/ford_price_prediction.iml" filepath="$PROJECT_DIR$/../ford_price_prediction/.idea/ford_price_prediction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/star_classification.iml" filepath="$PROJECT_DIR$/.idea/star_classification.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../train_health/.idea/train_health.iml" filepath="$PROJECT_DIR$/../train_health/.idea/train_health.iml" />
+    </modules>
+  </component>
+</project>
